@@ -27,6 +27,7 @@ function printChat(name) {
   } else {
     output.innerHTML = "Aún no hay mensajes para mostrar";
   }
+  handleDestination.value = name;
 }
 
 // Emit event
@@ -70,14 +71,23 @@ btnNewUser.addEventListener("click", function () {
 });
 
 socket.on("chat-public", function (data) {
-  var d = new Date();
-  var dateMinute = d.getHours() + ":" + d.getMinutes();
+  var date = new Date();
+  let hh = date.getHours();
+  let mm = date.getMinutes();
+  if (hh < 10) {
+    hh = "0" + hh;
+  }
+  if (mm < 10) {
+    mm = "0" + mm;
+  }
+  let t = hh + ":" + mm;
+
   var html = "";
   if (data.handle === handle.value) {
     html = `<div class="outgoing_msg">
     <div class="sent_msg">
     <p>${data.message}</p>
-      <span class="time_date"> ${data.handle} | ${dateMinute}</span>
+      <span class="time_date"> ${data.handle} | ${t}</span>
     </div>
   </div>`;
   } else {
