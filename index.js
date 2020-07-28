@@ -41,7 +41,9 @@ io.on("connection", (socket) => {
           message: "to:" + data.message,
         });
       } else {
-        console.log("User not found");
+        // console.log(data.handleDestination);
+        // console.log("User not found");
+        io.sockets.emit("chat-public", data);
       }
     } else {
       io.sockets.emit("chat-public", data);
