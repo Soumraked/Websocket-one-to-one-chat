@@ -27,6 +27,7 @@ function printChat(name) {
   } else {
     output.innerHTML = "Aún no hay mensajes para mostrar";
   }
+  handleDestination.value = name;
 }
 
 // Emit event
