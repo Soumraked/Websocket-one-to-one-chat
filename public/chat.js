@@ -69,38 +69,6 @@ btnNewUser.addEventListener("click", function () {
   }
 });
 
-// usernames.addEventListener("click", function (event) {
-//   if (event.target.value !== handle.value) {
-//     if (event.target.value === "public") {
-//       nameChat.innerHTML = `Estas en el chat <strong>público</strong>`;
-//     } else {
-//       nameChat.innerHTML = `Estas en el chat de <strong>${event.target.value}</strong>`;
-//     }
-
-//     handleDestination.value = event.target.value;
-//     printChat(event.target.value);
-//   }
-// });
-
-// socket.on("chat-public", function (data) {
-//   var d = new Date();
-//   var dateMinute = d.getHours() + ":" + d.getMinutes();
-//   var html = "";
-//   if (data.handle === handle.value) {
-//     html = `<div style="text-align: right;"><p><strong>[${dateMinute}][${data.handle}]:</strong>${data.message}</p></div>`;
-//   } else {
-//     html = `<div style="text-align: left;"><p><strong>[${dateMinute}][${data.handle}]: </strong>${data.message}</p></div>`;
-//   }
-//   if ("public" in history) {
-//     history.public.push(html);
-//   } else {
-//     history.public = [html];
-//   }
-
-//   nameChat.innerHTML = `<strong>Chat público</strong>`;
-//   printChat("public");
-//   //console.log(history);
-// });
 socket.on("chat-public", function (data) {
   var d = new Date();
   var dateMinute = d.getHours() + ":" + d.getMinutes();
@@ -138,31 +106,6 @@ socket.on("chat-public", function (data) {
   printChat("public");
   //console.log(history);
 });
-
-// socket.on("chat-private", function (data) {
-//   var d = new Date();
-//   var dateMinute = d.getHours() + ":" + d.getMinutes();
-//   var html = "";
-//   if (data.message.substring(0, 3) === "to:") {
-//     html = `<div style="text-align: right;"><p><strong>${dateMinute} : </strong>${data.message.substring(
-//       3
-//     )}</p></div>`;
-//   } else if (data.message.substring(0, 3) === "of:") {
-//     html = `<div style="text-align: left;"><p><strong>${dateMinute} : </strong>${data.message.substring(
-//       3
-//     )}</p></div>`;
-//   }
-//   if (data.handle in history) {
-//     history[data.handle].push(html);
-//   } else {
-//     history[data.handle] = [html];
-//   }
-
-//   nameChat.innerHTML = `<strong>Estas en el chat de ${data.handle}</strong>`;
-
-//   printChat(data.handle);
-//   //console.log(history);
-// });
 
 socket.on("chat-private", function (data) {
   var d = new Date();
@@ -202,20 +145,6 @@ socket.on("chat-private", function (data) {
   printChat(data.handle);
   //console.log(history);
 });
-
-// socket.on("newUser", function (data) {
-//   var html =
-//     '<select class="custom-select list-group" multiple id="userConnect">';
-//   html +=
-//     '<option value="public" selected class="list-group-item d-flex justify-content-between align-items-center">Sala pública</option>';
-//   for (let i = 0; i < data.length; i++) {
-//     if (data[i] !== handle.value) {
-//       html += `<option value="${data[i]}" class="list-group-item d-flex justify-content-between align-items-center">${data[i]}</option>`;
-//     }
-//   }
-//   html += "</select>";
-//   usernames.innerHTML = html;
-// });
 
 function changeDestiny(data) {
   if (data !== handle.value) {
