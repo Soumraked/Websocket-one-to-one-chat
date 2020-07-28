@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "live-server": "^1.2.1",
     "socket.io": "^2.3.0"
   }
 }
