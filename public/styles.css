@@ -178,6 +178,9 @@ img {
   right: 0;
   top: 11px;
   width: 33px;
+  margin-bottom: 20px;
+  margin-right: 10px;
+  top: 17%;
 }
 .messaging {
   padding: 0 0 50px 0;
@@ -185,4 +188,12 @@ img {
 .msg_history {
   height: 516px;
   overflow-y: auto;
+}
+
+.write_msg {
+  padding: 10px;
+}
+
+.send {
+  left: 40%;
 }
