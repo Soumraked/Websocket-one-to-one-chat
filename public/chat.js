@@ -96,6 +96,7 @@ socket.on("chat-public", function (data) {
       <img
         src="https://ptetutorials.com/images/user-profile.png"
         alt="sunil"
+        style="vertical-align: center"
       />
     </div>
     <div class="received_msg">
