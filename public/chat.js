@@ -69,7 +69,7 @@ function input() {
         if (data) {
           handleError.style.display = "none";
           handleError.innerHTML = "";
-          userName.innerHTML = `Bienvenido a Whatsup <strong>${handle.value}</strong>`;
+          userName.innerHTML = `Bienvenido a Whatsup, <strong>${handle.value}</strong>`;
           login.style.display = "none";
           roomChat.style.display = "block";
           nameChat.innerHTML = `Estas chateando en sala <strong>pública</strong>`;
