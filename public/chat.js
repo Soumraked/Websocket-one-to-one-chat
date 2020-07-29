@@ -101,7 +101,7 @@ socket.on("chat-public", function (data) {
     <div class="received_msg">
       <div class="received_withd_msg">
         <p>${data.message}</p>
-        <span class="time_date"> ${data.handle} | ${dateMinute}</span>
+        <span class="time_date"> ${data.handle} | ${t}</span>
       </div>
     </div>
   </div>`;
@@ -118,14 +118,22 @@ socket.on("chat-public", function (data) {
 });
 
 socket.on("chat-private", function (data) {
-  var d = new Date();
-  var dateMinute = d.getHours() + ":" + d.getMinutes();
+  var date = new Date();
+  let hh = date.getHours();
+  let mm = date.getMinutes();
+  if (hh < 10) {
+    hh = "0" + hh;
+  }
+  if (mm < 10) {
+    mm = "0" + mm;
+  }
+  let t = hh + ":" + mm;
   var html = "";
   if (data.message.substring(0, 3) === "to:") {
     html = `<div class="outgoing_msg">
     <div class="sent_msg">
     <p>${data.message.substring(3)}</p>
-      <span class="time_date"> ${data.handle} | ${dateMinute}</span>
+      <span class="time_date"> ${data.handle} | ${t}</span>
     </div>
   </div>`;
   } else if (data.message.substring(0, 3) === "of:") {
@@ -139,7 +147,7 @@ socket.on("chat-private", function (data) {
     <div class="received_msg">
       <div class="received_withd_msg">
         <p>${data.message.substring(3)}</p>
-        <span class="time_date"> ${data.handle} | ${dateMinute}</span>
+        <span class="time_date"> ${data.handle} | ${t}</span>
       </div>
     </div>
   </div>`;
