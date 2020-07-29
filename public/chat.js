@@ -15,7 +15,12 @@ var message = document.getElementById("message"),
   userName = document.getElementById("userName"),
   login = document.getElementById("login"),
   roomChat = document.getElementById("room-chat"),
-  nameChat = document.getElementById("nameChat");
+  nameChat = document.getElementById("nameChat"),
+  disconnect = document.getElementById("disconnect");
+
+disconnect.addEventListener("click", function () {
+  window.location.reload();
+});
 
 function printChat(name) {
   if (name in history) {
@@ -30,8 +35,7 @@ function printChat(name) {
   handleDestination.value = name;
 }
 
-// Emit event
-btn.addEventListener("click", function () {
+function sendMessage() {
   if (message.value != "") {
     socket.emit("chat", {
       message: message.value,
@@ -40,9 +44,21 @@ btn.addEventListener("click", function () {
     });
     message.value = "";
   }
+}
+
+// Emit event
+btn.addEventListener("click", function () {
+  sendMessage();
 });
 
-btnNewUser.addEventListener("click", function () {
+message.addEventListener("keyup", function (event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    sendMessage();
+  }
+});
+
+function input() {
   if (handle.value !== "") {
     socket.emit(
       "newUser",
@@ -53,10 +69,10 @@ btnNewUser.addEventListener("click", function () {
         if (data) {
           handleError.style.display = "none";
           handleError.innerHTML = "";
-          userName.innerHTML = `Conectado como <strong>${handle.value}</strong>`;
+          userName.innerHTML = `Bienvenido a Whatsup <strong>${handle.value}</strong>`;
           login.style.display = "none";
           roomChat.style.display = "block";
-          nameChat.innerHTML = `Estas en el chat <strong>público</strong>`;
+          nameChat.innerHTML = `Estas chateando en sala <strong>pública</strong>`;
           output.innerHTML = "Aún no hay mensajes para mostrar";
         } else {
           handleError.innerHTML = "El nombre de usuario ya está utilizado.";
@@ -68,6 +84,17 @@ btnNewUser.addEventListener("click", function () {
     handleError.innerHTML = "El nombre de usuario no puede estar vacio";
     handleError.style.display = "block";
   }
+}
+
+handle.addEventListener("keyup", function (event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    input();
+  }
+});
+
+btnNewUser.addEventListener("click", function () {
+  input();
 });
 
 socket.on("chat-public", function (data) {
@@ -113,7 +140,8 @@ socket.on("chat-public", function (data) {
     history.public = [html];
   }
 
-  nameChat.innerHTML = `Estas en el chat <strong>público</strong>`;
+  nameChat.innerHTML = `Estas chateando en sala <strong>pública</strong>`;
+
   printChat("public");
   //console.log(history);
 });
@@ -159,7 +187,7 @@ socket.on("chat-private", function (data) {
     history[data.handle] = [html];
   }
 
-  nameChat.innerHTML = `Estas en el chat de <strong>${data.handle}</strong>`;
+  nameChat.innerHTML = `Estas chateando con <strong>${data.handle}</strong>`;
 
   printChat(data.handle);
   //console.log(history);
@@ -168,9 +196,9 @@ socket.on("chat-private", function (data) {
 function changeDestiny(data) {
   if (data !== handle.value) {
     if (data === "public") {
-      nameChat.innerHTML = `Estas en el chat <strong>público</strong>`;
+      nameChat.innerHTML = `Estas chateando en sala <strong>pública</strong>`;
     } else {
-      nameChat.innerHTML = `Estas en el chat de <strong>${data}</strong>`;
+      nameChat.innerHTML = `Estas chateando con <strong>${data}</strong>`;
     }
 
     handleDestination.value = data;
