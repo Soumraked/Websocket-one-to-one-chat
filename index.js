@@ -23,6 +23,17 @@ io.on("connection", (socket) => {
       callback(false);
     } else {
       callback(true);
+      const address = socket.request.connection._peername;
+      console.log(
+        "Server says: the IP " +
+          address.address +
+          " with the PORT " +
+          address.port +
+          " was assigned to '" +
+          data.handle +
+          "'"
+      );
+
       socket.nickname = data.handle;
       users[socket.nickname] = socket;
       io.sockets.emit("newUser", Object.keys(users));
