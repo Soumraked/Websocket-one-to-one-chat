@@ -3,6 +3,7 @@ var socket = io.connect("http://localhost:4000");
 
 // local database
 var history = {};
+var destiny = "";
 
 // Query DOM
 var message = document.getElementById("message"),
@@ -48,6 +49,8 @@ function sendMessage() {
 
 function input() {
   // Login user
+  message.disabled = false;
+  message.placeholder = "Escribe un mensaje...";
   if (handle.value !== "") {
     socket.emit(
       "newUser",
@@ -76,6 +79,9 @@ function input() {
 }
 
 function changeDestiny(data) {
+  message.placeholder = "Escribe un mensaje...";
+  message.disabled = false;
+  destiny = data;
   // Change the destination of messages
   if (data !== handle.value) {
     if (data === "public") {
@@ -163,7 +169,6 @@ socket.on("chat-public", function (data) {
   nameChat.innerHTML = `Estas chateando en sala <strong>pública</strong>`;
 
   printChat("public");
-  //console.log(history);
 });
 
 // Enter message private room
@@ -211,7 +216,6 @@ socket.on("chat-private", function (data) {
   nameChat.innerHTML = `Estas chateando con <strong>${data.handle}</strong>`;
 
   printChat(data.handle);
-  //console.log(history);
 });
 
 // Append new user in the connects
@@ -247,4 +251,15 @@ socket.on("newUser", function (data) {
     }
   }
   usernames.innerHTML = html;
+});
+
+socket.on("userDisconnect", function (data) {
+  if (data in history) {
+    nameChat.innerHTML = `El usuario <strong>${data}</strong>, se ha desconectado.`;
+    message.disabled = true;
+    message.placeholder =
+      "No puedes enviarle un mensaje a una persona desconectada.";
+  } else {
+    changeDestiny("public");
+  }
 });

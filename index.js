@@ -64,5 +64,6 @@ io.on("connection", (socket) => {
     if (!socket.nickname) return;
     delete users[socket.nickname];
     updateNicknames();
+    io.sockets.emit("userDisconnect", socket.nickname);
   });
 });
