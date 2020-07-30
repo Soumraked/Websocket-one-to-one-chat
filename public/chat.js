@@ -1,6 +1,7 @@
 // Make connection
 var socket = io.connect("http://localhost:4000");
 
+// local database
 var history = {};
 
 // Query DOM
@@ -18,11 +19,9 @@ var message = document.getElementById("message"),
   nameChat = document.getElementById("nameChat"),
   disconnect = document.getElementById("disconnect");
 
-disconnect.addEventListener("click", function () {
-  window.location.reload();
-});
-
+// Functions
 function printChat(name) {
+  // Show chat of selected destination
   if (name in history) {
     output.innerHTML = "";
     for (let i = 0; i < history[name].length; i++) {
@@ -36,6 +35,7 @@ function printChat(name) {
 }
 
 function sendMessage() {
+  // Enter message
   if (message.value != "") {
     socket.emit("chat", {
       message: message.value,
@@ -46,19 +46,8 @@ function sendMessage() {
   }
 }
 
-// Emit event
-btn.addEventListener("click", function () {
-  sendMessage();
-});
-
-message.addEventListener("keyup", function (event) {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    sendMessage();
-  }
-});
-
 function input() {
+  // Login user
   if (handle.value !== "") {
     socket.emit(
       "newUser",
@@ -86,6 +75,36 @@ function input() {
   }
 }
 
+function changeDestiny(data) {
+  // Change the destination of messages
+  if (data !== handle.value) {
+    if (data === "public") {
+      nameChat.innerHTML = `Estas chateando en sala <strong>pública</strong>`;
+    } else {
+      nameChat.innerHTML = `Estas chateando con <strong>${data}</strong>`;
+    }
+
+    handleDestination.value = data;
+    printChat(data);
+  }
+}
+
+// Events
+btn.addEventListener("click", function () {
+  sendMessage();
+});
+
+message.addEventListener("keyup", function (event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    sendMessage();
+  }
+});
+
+disconnect.addEventListener("click", function () {
+  window.location.reload();
+});
+
 handle.addEventListener("keyup", function (event) {
   if (event.keyCode === 13) {
     event.preventDefault();
@@ -97,6 +116,7 @@ btnNewUser.addEventListener("click", function () {
   input();
 });
 
+// Enter message public room
 socket.on("chat-public", function (data) {
   var date = new Date();
   let hh = date.getHours();
@@ -146,6 +166,7 @@ socket.on("chat-public", function (data) {
   //console.log(history);
 });
 
+// Enter message private room
 socket.on("chat-private", function (data) {
   var date = new Date();
   let hh = date.getHours();
@@ -193,19 +214,7 @@ socket.on("chat-private", function (data) {
   //console.log(history);
 });
 
-function changeDestiny(data) {
-  if (data !== handle.value) {
-    if (data === "public") {
-      nameChat.innerHTML = `Estas chateando en sala <strong>pública</strong>`;
-    } else {
-      nameChat.innerHTML = `Estas chateando con <strong>${data}</strong>`;
-    }
-
-    handleDestination.value = data;
-    printChat(data);
-  }
-}
-
+// Append new user in the connects
 socket.on("newUser", function (data) {
   var html = `<div class="chat_list" onclick="changeDestiny('public')" style="cursor: pointer;">
   <div class="chat_people">

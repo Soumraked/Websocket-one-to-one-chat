@@ -12,12 +12,14 @@ app.use(express.static("public"));
 
 // Socket setup & pass serve
 var io = socket(serve);
+
+// users storage
 var users = {};
 io.on("connection", (socket) => {
   function updateNicknames() {
     io.sockets.emit("newUser", Object.keys(users));
   }
-
+  // append new user
   socket.on("newUser", function (data, callback) {
     if (data.handle in users) {
       callback(false);
@@ -33,13 +35,12 @@ io.on("connection", (socket) => {
           data.handle +
           "'"
       );
-
       socket.nickname = data.handle;
       users[socket.nickname] = socket;
       io.sockets.emit("newUser", Object.keys(users));
     }
   });
-
+  // send message according to your recipient
   socket.on("chat", function (data, callback) {
     if (data.handleDestination !== "") {
       if (data.handleDestination in users) {
@@ -52,15 +53,13 @@ io.on("connection", (socket) => {
           message: "to:" + data.message,
         });
       } else {
-        // console.log(data.handleDestination);
-        // console.log("User not found");
         io.sockets.emit("chat-public", data);
       }
     } else {
       io.sockets.emit("chat-public", data);
     }
   });
-
+  // disconnect user
   socket.on("disconnect", function (data) {
     if (!socket.nickname) return;
     delete users[socket.nickname];
